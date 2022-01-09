@@ -173,5 +173,32 @@ function inspect {
   echo
 }
 
+function _comp {
+  # echo "${COMP_CWORDS[*]}"
+  # echo "${COMP_CWORDS[@]}"
+  local _A=()
+  if shopt -s | grep nullglob; then
+    _A=(*.tracker)
+  else
+    shopt -s nullglob
+    _A=(*.tracker)
+    shopt -u nullglob
+  fi
+  _A=( "${_A[@]%.*}" )
+  # echo "${_A[*]}"
+  if [ 1 -eq "$COMP_CWORD" ]; then
+    COMPREPLY=()
+    # COMPREPLY=( $(compgen -W "${_A[*]}" -- "${COMP_WORDS[COMP_CWORD]}") )
+    # sha1sum <<<"$(compgen -W "${_A[*]}" -- "${COMP_WORDS[COMP_CWORD]}")"
+    mapfile -t COMPREPLY <<<"$(compgen -W "${_A[*]}" -- "${COMP_WORDS[COMP_CWORD]}")"
+    # Doesn't work
+    # compgen -W "${_A[*]}" -- "${COMP_WORDS[COMP_CWORD]}" | sha1sum
+    # compgen -W "${_A[*]}" -- "${COMP_WORDS[COMP_CWORD]}" | mapfile -t COMPREPLY
+  fi
+}
+
+complete -F _comp verify
+complete -F _comp inspect
+
 cd "$TRACKER_D" || { err "cd fail"; return; }
 help2
