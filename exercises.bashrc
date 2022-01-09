@@ -43,6 +43,7 @@ function selftest {
   )
   echo "${SC[@]}"
   "${SC[@]}"
+  echo
 }
 
 # printf "\\$(printf %o $((RANDOM%26+65)))" &&
@@ -63,13 +64,14 @@ STATE_ARR=(
 )
 function help2 {
   echo
-  echo "${FARR[@]/%/()}"
+  printf "\e[33m%s\e[0m " "${FARR[@]/%/()}"
+  echo
   echo
   # (H/AHI)
-  echo "    - untouched"
-  echo "T9A - interesting/high-priority/aforementioned (not finished yet)"
-  echo "Y4B - finished/skipped"
-  echo "H9J - WIP"
+  printf    "\e[2m%s\e[0m" "nil"; echo " - untouched"
+  printf "\e[1;34m%s\e[0m" "T9A"; echo " - interesting/high-priority/aforementioned (not finished yet)"
+  printf    "\e[0m%s\e[0m" "Y4B"; echo " - finished/skipped"
+  printf "\e[1;31m%s\e[0m" "H9J"; echo " - WIP"
   echo
   printf "exercises with numbers printed in "
   printf "\e[31m%s\e[0m"   "red(pink) "
@@ -159,7 +161,7 @@ function inspect {
       printf "\e[1;34m%s\e[0m " $((10#$number_1))
       ;;
     "Y4B")
-      printf    "\e[2m%s\e[0m "        .
+      # printf    "\e[2m%s\e[0m "        .
       ;;
     "H9J")
       printf "\e[1;31m%s\e[0m " $((10#$number_1))
